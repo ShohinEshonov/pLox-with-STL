@@ -74,6 +74,8 @@ class Scanner:
             if self.match("/"):
                 while self.peek() != "\n" and not self.isAtEnd():
                     self.advance()
+            elif self.match("*"):
+                self.multiComment()
             else:
                 self.addToken(TokenType.SLASH)
         elif c == " " or c == "\r" or c == "\t":
@@ -84,7 +86,6 @@ class Scanner:
 
         elif c == '"':
             self.string()
-
         else:
             if self.isDigit(c):
                 self.number()
@@ -129,6 +130,25 @@ class Scanner:
 
         value = self.source[self.start + 1 : self.current - 1]
         self.addToken(TokenType.STRING, value)
+
+    def multiComment(self):
+        count = 1
+        while count > 0 and not self.isAtEnd():
+            if self.peek() == "\n":
+                self.line += 1
+
+            if self.peek() == "/" and self.peekNext() == "*":
+                count += 1
+                self.advance()
+                self.advance()
+            elif self.peek() == "*" and self.peekNext() == "/":
+                count -= 1
+                self.advance()
+                self.advance()
+            else:
+                self.advance()
+        if count != 0:
+            self.error_handler(self.line, "Undeterminated comentary")
 
     def match(self, expected: str):
         if self.isAtEnd():
