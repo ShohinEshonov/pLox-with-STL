@@ -1,5 +1,5 @@
 from sys import exit, argv, stdin
-from Scanner import Scanner
+from .Scanner import Scanner
 
 
 class Lox:

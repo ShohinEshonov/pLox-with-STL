@@ -1,5 +1,5 @@
-from TokenType import TokenType
-from Token import Token
+from .TokenType import TokenType
+from .Token import Token
 
 
 class Scanner:
