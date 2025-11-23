@@ -21,19 +21,29 @@ class Parser:
             return None
 
     def expression(self):
-        return self.equality()
+        return self.comma()
 
-    def equality(self):
-        expr = self.comparision()
+    def comma(self):
+        expr = self.equality()
 
-        while self.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL):
+        while self.match(TokenType.COMMA):
             operator = self.previous()
-            right = self.comparision()
+            right = self.expression()
             expr = Expr.Binary(expr, operator, right)
 
         return expr
 
-    def comparision(self):
+    def equality(self):
+        expr = self.comparison()
+
+        while self.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL):
+            operator = self.previous()
+            right = self.comparison()
+            expr = Expr.Binary(expr, operator, right)
+
+        return expr
+
+    def comparison(self):
         expr = self.term()
 
         while self.match(
@@ -87,7 +97,7 @@ class Parser:
 
         if self.match(TokenType.LEFT_PAREN):
             expr = self.expression()
-            self.consume(TokenType.RIGHT_PAREN, "Except ')' after expression")
+            self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression")
             return Expr.Grouping(expr)
 
         raise self.error(self.peek(), "Expect Expression")
