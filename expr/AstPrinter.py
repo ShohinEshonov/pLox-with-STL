@@ -1,4 +1,4 @@
-from .Expr import ExprVisitor, Expr, Binary, Grouping, Literal, Unary
+from .Expr import ExprVisitor, Expr, Binary, Grouping, Literal, Unary, Ternary
 from pLox.Token import Token
 from pLox.TokenType import TokenType
 
@@ -20,6 +20,11 @@ class AstPrinter(ExprVisitor):
 
     def visitUnaryExpr(self, expr: Unary):
         return self.parenthesize(expr.operator.lexeme, expr.right)
+
+    def visitTernaryExpr(self, expr: Ternary):
+        return self.parenthesize(
+            "Ternary", expr.condition, expr.then_expr, expr.else_expr
+        )
 
     def parenthesize(self, name: str, *exprs):
         builder = []

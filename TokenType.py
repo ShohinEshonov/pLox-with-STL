@@ -13,6 +13,8 @@ class TokenType(Enum):
     SEMICOLON = auto()
     SLASH = auto()
     STAR = auto()
+    QUESTION = auto()
+    COLON = auto()
 
     BANG = auto()
     BANG_EQUAL = auto()

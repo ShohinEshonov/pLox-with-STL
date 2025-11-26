@@ -24,13 +24,25 @@ class Parser:
         return self.comma()
 
     def comma(self):
-        expr = self.equality()
+        expr = self.ternary()
 
         while self.match(TokenType.COMMA):
             operator = self.previous()
-            right = self.expression()
+            right = self.ternary()
             expr = Expr.Binary(expr, operator, right)
 
+        return expr
+
+    def ternary(self):
+        expr = self.equality()
+
+        if self.match(TokenType.QUESTION):
+            then_branch = self.ternary()
+            self.consume(
+                TokenType.COLON, "Waiting : after ternary before ternary operand"
+            )
+            else_branch = self.ternary()
+            expr = Expr.Ternary(expr, then_branch, else_branch)
         return expr
 
     def equality(self):

@@ -64,6 +64,10 @@ class Scanner:
             self.addToken(TokenType.BANG_EQUAL if self.match("=") else TokenType.BANG)
         elif c == "=":
             self.addToken(TokenType.EQUAL_EQUAL if self.match("=") else TokenType.EQUAL)
+        elif c == "?":
+            self.addToken(TokenType.QUESTION)
+        elif c == ":":
+            self.addToken(TokenType.COLON)
         elif c == "<":
             self.addToken(TokenType.LESS_EQUAL if self.match("=") else TokenType.LESS)
         elif c == ">":

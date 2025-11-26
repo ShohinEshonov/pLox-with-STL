@@ -25,6 +25,10 @@ class ExprVisitor(ABC):
     def visitUnaryExpr(self, expr: "Unary"):
         pass
 
+    @abstractmethod
+    def visitTernaryExpr(self, expr: "Ternary"):
+        pass
+
 
 class Binary(Expr):
     def __init__(self, left: Expr, operator: Token, right: Expr):
@@ -42,6 +46,16 @@ class Grouping(Expr):
 
     def accept(self, visitor: "ExprVisitor"):
         return visitor.visitGroupingExpr(self)
+
+
+class Ternary(Expr):
+    def __init__(self, condition: Expr, then_expr: Expr, else_expr: Expr):
+        self.condition = condition
+        self.then_expr = then_expr
+        self.else_expr = else_expr
+
+    def accept(self, visitor: "ExprVisitor"):
+        return visitor.visitTernaryExpr(self)
 
 
 class Literal(Expr):
